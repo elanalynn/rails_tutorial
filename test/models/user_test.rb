@@ -81,4 +81,12 @@ class UserTest < ActiveSupport::TestCase
     return false if digest.nil?
     BCrypt::Password.new(digest).is_password?(token)
   end
+
+  test "associated microposts should be destroyed" do
+    @user.save
+    @user.microposts.create!(content: "Lorem ipsum")
+    assert_difference 'Micropost.count', -1 do
+      @user.destroy
+    end
+  end
 end
